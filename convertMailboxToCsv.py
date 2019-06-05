@@ -125,7 +125,10 @@ with open('emailMessage.csv' ,'w') as writeFile:
             row.append('')
         if 'Date' in message:
             header.append('Date')
-            date_time_obj = datetime.datetime.strptime(message['Date'], '%a, %d %b %Y %H:%M:%S %z')
+            datedring = message['Date']
+            datedring =re.sub('\(\S+\)','',datedring)
+            datedring=datedring.strip()
+            date_time_obj = datetime.datetime.strptime(datedring, '%a, %d %b %Y %H:%M:%S %z')
             print(date_time_obj)
             row.append(str(date_time_obj.strftime('%Y-%m-%d %H:%M:%S')))
         else:
@@ -142,8 +145,6 @@ with open('emailMessage.csv' ,'w') as writeFile:
         if number==1:
             lines.append(header)
         lines.append(row)
-        if number==100:
-            break
     writer = csv.writer(writeFile)
     writer.writerows(lines)
 
