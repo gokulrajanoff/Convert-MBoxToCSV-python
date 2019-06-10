@@ -91,7 +91,9 @@ with open('emailMessage.csv' ,'w') as writeFile:
                 print(part.get_content_maintype())
                 if part.get_content_maintype() == 'text':
                     if part.get_content_subtype() =='plain':
-                        messagePart.append(str(part))
+                        print (part)
+                        Temp = str(part).split("\n",1)[1]
+                        messagePart.append(str(Temp))
             row.append(','.join(messagePart))
         else:
             content = message.get_payload(decode=True)
@@ -125,10 +127,7 @@ with open('emailMessage.csv' ,'w') as writeFile:
             row.append('')
         if 'Date' in message:
             header.append('Date')
-            datedring = message['Date']
-            datedring =re.sub('\(\S+\)','',datedring)
-            datedring=datedring.strip()
-            date_time_obj = datetime.datetime.strptime(datedring, '%a, %d %b %Y %H:%M:%S %z')
+            date_time_obj = datetime.datetime.strptime(message['Date'], '%a, %d %b %Y %H:%M:%S %z')
             print(date_time_obj)
             row.append(str(date_time_obj.strftime('%Y-%m-%d %H:%M:%S')))
         else:
@@ -145,6 +144,8 @@ with open('emailMessage.csv' ,'w') as writeFile:
         if number==1:
             lines.append(header)
         lines.append(row)
+        if number==100:
+            break
     writer = csv.writer(writeFile)
     writer.writerows(lines)
 
